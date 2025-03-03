@@ -5,9 +5,6 @@ type TorrentFile struct {
 	InfoHash    [20]byte
 	PieceHashes [][20]byte
 	PieceLength int
+	Length      int
 	Name        string
-}
-
-func (bto bencodeTorrent) toTorrentFile() (TorrentFile, error) {
-
 }
