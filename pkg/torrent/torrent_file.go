@@ -1,4 +1,4 @@
-package torrent
+package torrentfile
 
 const Port uint16 = 6881
 
