@@ -1,7 +1,8 @@
-package torrent
+package torrentfile
 
 import (
-	
+	"net/url"
+	"strconv"
 )
 
 func (t *TorrentFile) buildTrackerURL(peerID [20]byte, port uint16) (string, error) {
