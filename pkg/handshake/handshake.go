@@ -55,3 +55,11 @@ func Read(r io.Reader) (*Handshake, error) {
 	}
 	return &h, nil
 }
+
+func New(infoHash, peerID [20]byte) *Handshake {
+	return &Handshake{
+		Pstr:     "BitTorrent Protocol",
+		InfoHash: infoHash,
+		PeerID:   peerID,
+	}
+}
