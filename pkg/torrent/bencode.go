@@ -1,5 +1,11 @@
 package torrent
 
+import (
+	"io"
+
+	"github.com/jackpal/bencode-go"
+)
+
 type bencodeInfo struct {
 	Pieces      string `bencode:"pieces"`
 	PieceLength string `bencode:"piece length"`
@@ -7,7 +13,7 @@ type bencodeInfo struct {
 	Name        string `bencode:"name"`
 }
 
-type bencodeTorrrent struct {
+type bencodeTorrent struct {
 	Announce string      `bencode:"announce"`
 	Info     bencodeInfo `bencode:"info"`
 }
