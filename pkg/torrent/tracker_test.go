@@ -34,12 +34,12 @@ func TestRequestPeers(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		response := []byte(
 			"d" +
-					"8:interval" + "i900e" +
-					"5:peers" + "12:" +
-					string([]byte{
-						192, 0, 2, 123, 0x1A, 0xE1, // 0x1AE1 = 6881
-						127, 0, 0, 1, 0x1A, 0xE9, // 0x1AE9 = 6889
-					}) + "e")
+				"8:interval" + "i900e" +
+				"5:peers" + "12:" +
+				string([]byte{
+					192, 0, 2, 123, 0x1A, 0xE1, // 0x1AE1 = 6881
+					127, 0, 0, 1, 0x1A, 0xE9, // 0x1AE9 = 6889
+				}) + "e")
 		w.Write(response)
 	}))
 	defer ts.Close()
@@ -49,7 +49,7 @@ func TestRequestPeers(t *testing.T) {
 		PieceHashes: [][20]byte{
 			{49, 50, 51, 52, 53, 54, 55, 56, 57, 48, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106},
 			{97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 49, 50, 51, 52, 53, 54, 55, 56, 57, 48},
-		}
+		},
 		PieceLength: 262144,
 		Length:      351272960,
 		Name:        "debian-10.2.0-amd64-netinst.iso",
@@ -57,8 +57,8 @@ func TestRequestPeers(t *testing.T) {
 	peerID := [20]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 	const port uint16 = 6882
 	expected := []peer.Peer{
-		{IP: net.IP{192,0,2,13}, Port: 6881},
-		{IP: net.IP{192,0,0,1}, Port: 6889},
+		{IP: net.IP{192, 0, 2, 13}, Port: 6881},
+		{IP: net.IP{192, 0, 0, 1}, Port: 6889},
 	}
 	p, err := tf.requestPeers(peerID, port)
 	assert.Nil(t, err)
