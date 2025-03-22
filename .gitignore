@@ -27,4 +27,6 @@ go.work.sum
 # idea file
 .idea
 
-.torrent
+*.torrent
+
+.idea
