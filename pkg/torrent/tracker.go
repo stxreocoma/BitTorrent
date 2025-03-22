@@ -23,7 +23,7 @@ func (t *TorrentFile) buildTrackerURL(peerID [20]byte, port uint16) (string, err
 	params := url.Values{
 		"info_hash":  []string{string(t.InfoHash[:])},
 		"peer_id":    []string{string(peerID[:])},
-		"port":       []string{strconv.Itoa(int(Port))},
+		"port":       []string{strconv.Itoa(int(port))},
 		"uploaded":   []string{"0"},
 		"downloaded": []string{"0"},
 		"compact":    []string{"1"},
@@ -34,13 +34,13 @@ func (t *TorrentFile) buildTrackerURL(peerID [20]byte, port uint16) (string, err
 }
 
 func (t *TorrentFile) requestPeers(peerID [20]byte, port uint16) ([]peer.Peer, error) {
-	url, err := t.buildTrackerURL(peerID, port)
+	URL, err := t.buildTrackerURL(peerID, port)
 	if err != nil {
 		return nil, err
 	}
 
 	c := &http.Client{Timeout: 15 * time.Second}
-	resp, err := c.Get(url)
+	resp, err := c.Get(URL)
 	if err != nil {
 		return nil, err
 	}

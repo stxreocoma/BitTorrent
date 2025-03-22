@@ -10,12 +10,14 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
+const testDataPath = "testdata/archlinux-2019.12.01-x86_64.iso.torrent"
+
 var update = flag.Bool("update", false, "update .golden.json files")
 
 func TestOpen(t *testing.T) {
 	torrent, err := Open("testdata/archlinux-2019.12.01-x86_64.iso.torrent")
 	require.Nil(t, err)
-	goldenPath := "testdata/archlinux-2019.12.01-x86_64.golden.json"
+	goldenPath := "testdata/archlinux-2019.12.01-x86_64.iso.torrent.golden.json"
 	if *update {
 		serialized, err := json.MarshalIndent(torrent, "", "  ")
 		require.Nil(t, err)

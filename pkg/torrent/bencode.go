@@ -1,14 +1,14 @@
 package torrentfile
 
 import (
-	"io"
+	"os"
 
 	"github.com/jackpal/bencode-go"
 )
 
 type bencodeInfo struct {
 	Pieces      string `bencode:"pieces"`
-	PieceLength string `bencode:"piece length"`
+	PieceLength int    `bencode:"piece length"`
 	Length      int    `bencode:"length"`
 	Name        string `bencode:"name"`
 }
@@ -18,11 +18,19 @@ type bencodeTorrent struct {
 	Info     bencodeInfo `bencode:"info"`
 }
 
-func Open(r io.Reader) (*bencodeTorrent, error) {
-	bto := bencodeTorrent{}
-	err := bencode.Unmarshal(r, &bto)
+func Open(path string) (TorrentFile, error) {
+	file, err := os.Open(path)
 	if err != nil {
-		return nil, err
+		return TorrentFile{}, err
 	}
-	return &bto, nil
+	defer file.Close()
+
+	bto := bencodeTorrent{}
+	err = bencode.Unmarshal(file, &bto)
+	if err != nil {
+		return TorrentFile{}, err
+	}
+	return bto.toTorrentFile()
 }
+
+//Алина покупает себе белье крем и духи виктория сикрет и дает мне себя

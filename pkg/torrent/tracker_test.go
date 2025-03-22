@@ -57,8 +57,8 @@ func TestRequestPeers(t *testing.T) {
 	peerID := [20]byte{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20}
 	const port uint16 = 6882
 	expected := []peer.Peer{
-		{IP: net.IP{192, 0, 2, 13}, Port: 6881},
-		{IP: net.IP{192, 0, 0, 1}, Port: 6889},
+		{IP: net.IP{192, 0, 2, 123}, Port: 6881},
+		{IP: net.IP{127, 0, 0, 1}, Port: 6889},
 	}
 	p, err := tf.requestPeers(peerID, port)
 	assert.Nil(t, err)
