@@ -15,6 +15,7 @@ const reservedBytes = 8
 
 // infoHash length is 19 but we need the next index so it is 19+1
 const infoHashLen = 20
+const peerIDLen = 20
 
 func (h *Handshake) Serialize() []byte {
 	pstrlen := len(h.Pstr)
@@ -40,7 +41,7 @@ func Read(r io.Reader) (*Handshake, error) {
 		err := fmt.Errorf("pstr length is zero")
 		return nil, err
 	}
-	buf := make([]byte, pstrLen)
+	buf := make([]byte, pstrLen+reservedBytes+infoHashLen+peerIDLen)
 	_, err = io.ReadFull(r, buf)
 	if err != nil {
 		return nil, err
@@ -49,7 +50,7 @@ func Read(r io.Reader) (*Handshake, error) {
 	copy(infoHash[:], buf[pstrLen+reservedBytes:pstrLen+reservedBytes+infoHashLen])
 	copy(peerID[:], buf[pstrLen+reservedBytes+infoHashLen:])
 	h = Handshake{
-		Pstr:     string(buf[:pstrLen]),
+		Pstr:     string(buf[0:pstrLen]),
 		InfoHash: infoHash,
 		PeerID:   peerID,
 	}
@@ -58,7 +59,7 @@ func Read(r io.Reader) (*Handshake, error) {
 
 func New(infoHash, peerID [20]byte) *Handshake {
 	return &Handshake{
-		Pstr:     "BitTorrent Protocol",
+		Pstr:     "BitTorrent protocol",
 		InfoHash: infoHash,
 		PeerID:   peerID,
 	}
