@@ -1,0 +1,6 @@
+pre-commit:
+  commands:
+    govet:
+      files: git ls-files -m
+      glob: "*.go"
+      run: go vet {files}
