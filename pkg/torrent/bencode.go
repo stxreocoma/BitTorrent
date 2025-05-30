@@ -32,5 +32,3 @@ func Open(path string) (TorrentFile, error) {
 	}
 	return bto.toTorrentFile()
 }
-
-
