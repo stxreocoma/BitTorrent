@@ -22,16 +22,6 @@ type TorrentFile struct {
 	Name        string
 }
 
-func (i *bencodeInfo) Hash() ([20]byte, error) {
-	var buf bytes.Buffer
-	err := bencode.Marshal(&buf, *i)
-	if err != nil {
-		return [20]byte{}, err
-	}
-	hash := sha1.Sum(buf.Bytes())
-	return hash, nil
-}
-
 func (t *TorrentFile) DownloadToFile(path string) error {
 	var peerID [20]byte
 	_, err := rand.Read(peerID[:])
@@ -68,6 +58,16 @@ func (t *TorrentFile) DownloadToFile(path string) error {
 		return err
 	}
 	return nil
+}
+
+func (i *bencodeInfo) hash() ([20]byte, error) {
+	var buf bytes.Buffer
+	err := bencode.Marshal(&buf, *i)
+	if err != nil {
+		return [20]byte{}, err
+	}
+	hash := sha1.Sum(buf.Bytes())
+	return hash, nil
 }
 
 func (i *bencodeInfo) splitPieceHashes() ([][20]byte, error) {
