@@ -70,16 +70,6 @@ func (t *TorrentFile) DownloadToFile(path string) error {
 	return nil
 }
 
-func (i *bencodeInfo) hash() ([20]byte, error) {
-	var buf bytes.Buffer
-	err := bencode.Marshal(&buf, *i)
-	if err != nil {
-		return [20]byte{}, err
-	}
-	hash := sha1.Sum(buf.Bytes())
-	return hash, nil
-}
-
 func (i *bencodeInfo) splitPieceHashes() ([][20]byte, error) {
 	hashLen := 20
 	buf := []byte(i.Pieces)
@@ -97,7 +87,7 @@ func (i *bencodeInfo) splitPieceHashes() ([][20]byte, error) {
 }
 
 func (bto *bencodeTorrent) toTorrentFile() (TorrentFile, error) {
-	infoHash, err := bto.Info.Hash()
+	infoHash, err := bto.Info.hash()
 	if err != nil {
 		return TorrentFile{}, err
 	}
