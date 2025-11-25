@@ -2,10 +2,12 @@ package client
 
 import (
 	"bittorent/pkg/bitfield"
+	"bittorent/pkg/dialer"
 	"bittorent/pkg/handshake"
 	"bittorent/pkg/message"
 	"bittorent/pkg/peer"
 	"bytes"
+	"context"
 	"fmt"
 	"net"
 	"time"
@@ -56,8 +58,9 @@ func ReceiveBitfield(conn net.Conn) (bitfield.Bitfield, error) {
 	return msg.Payload, nil
 }
 
-func New(peer peer.Peer, peerID, infoHash [20]byte) (*Client, error) {
-	conn, err := net.DialTimeout("tcp", peer.String(), 3*time.Second)
+func New(dial dialer.DialFunc, peer peer.Peer, peerID, infoHash [20]byte) (*Client, error) {
+	//conn, err := net.DialTimeout("tcp", peer.String(), 3*time.Second)
+	conn, err := dial(context.Background(), peer.String())
 	if err != nil {
 		return nil, err
 	}

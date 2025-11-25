@@ -1,6 +1,7 @@
 package torrentfile
 
 import (
+	"bittorent/pkg/dialer"
 	"bittorent/pkg/p2p"
 	"bytes"
 	"crypto/rand"
@@ -22,7 +23,7 @@ type TorrentFile struct {
 	Name        string
 }
 
-func (t *TorrentFile) DownloadToFile(path string) error {
+func (t *TorrentFile) DownloadToFile(dial dialer.DialFunc, path string) error {
 	var peerID [20]byte
 	_, err := rand.Read(peerID[:])
 	if err != nil {
@@ -43,7 +44,7 @@ func (t *TorrentFile) DownloadToFile(path string) error {
 		Length:      t.Length,
 		Name:        t.Name,
 	}
-	buf, err := torrent.Download()
+	buf, err := torrent.Download(dial)
 	if err != nil {
 		return err
 	}

@@ -2,6 +2,7 @@ package p2p
 
 import (
 	"bittorent/pkg/client"
+	"bittorent/pkg/dialer"
 	"bittorent/pkg/message"
 	"bittorent/pkg/peer"
 	"bytes"
@@ -120,8 +121,8 @@ func checkIntegrity(pw *pieceWork, buf []byte) error {
 	return nil
 }
 
-func (t *Torrent) startDownloadWorker(peer peer.Peer, workQueue chan *pieceWork, results chan *pieceResult) {
-	c, err := client.New(peer, t.PeerID, t.InfoHash)
+func (t *Torrent) startDownloadWorker(dial dialer.DialFunc, peer peer.Peer, workQueue chan *pieceWork, results chan *pieceResult) {
+	c, err := client.New(dial, peer, t.PeerID, t.InfoHash)
 	if err != nil {
 		log.Printf("could not handshake with %s. Disconnecting\n", peer.IP)
 		return
@@ -171,7 +172,7 @@ func (t *Torrent) calculatePieceSize(index int) int {
 	return end - begin
 }
 
-func (t *Torrent) Download() ([]byte, error) {
+func (t *Torrent) Download(dial dialer.DialFunc) ([]byte, error) {
 	log.Println("starting download:", t.Name)
 
 	workQueue := make(chan *pieceWork, len(t.PieceHashes))
@@ -182,7 +183,7 @@ func (t *Torrent) Download() ([]byte, error) {
 	}
 
 	for _, peer := range t.Peers {
-		go t.startDownloadWorker(peer, workQueue, results)
+		go t.startDownloadWorker(dial, peer, workQueue, results)
 	}
 	buf := make([]byte, t.Length)
 	donePieces := 0
